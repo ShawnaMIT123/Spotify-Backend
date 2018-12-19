@@ -6,13 +6,16 @@ class Api::V1::RoomsController < ApplicationController
   end
 
   def show
-    
+
     render json: @room
   end
 
   def update
-    @room.update(room_params)
-    if @room.save
+
+
+    
+    track = Track.new(room_id: @room.id, spotify_url: room_params["uri"], title: room_params["title"], artist: room_params["artist"], img_url: room_params["image"])
+    if track.save
       render json: @room, status: :accepted
     else
       render json: { errors: @room.errors.full_messages }, status: :unprocessible_entity
@@ -22,7 +25,7 @@ class Api::V1::RoomsController < ApplicationController
   private
 
   def room_params
-    params.permit(:title, :content)
+    params.permit(:title, :image, :artist, :uri, :id, :img_url, :duration_ms)
   end
 
   def find_room

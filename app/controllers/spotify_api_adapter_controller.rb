@@ -14,7 +14,7 @@ class SpotifyApiAdapterController < ApplicationController
       auth_params = JSON.parse(auth_response)
       current_user.update(access_token: auth_params["access_token"])
     else
-      puts "Current user's acces token has not expired"
+      puts "Current user's access token has not expired"
     end
   end
 end
