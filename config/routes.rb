@@ -5,7 +5,10 @@ Rails.application.routes.draw do
       post "/users/addPlaylist" => "users#addPlaylist"
       post "/users/addSongToPlaylist" => "users#addSongToPlaylist"
       post "/users/browserBar" => "users#browserBar"
+      get "/users/accesstoken" => "users#accessToken"
       get "/users" => "users#create"
+      get '/users/:id' => 'users#show'
+
       resources :rooms
       resources :tracks
 
