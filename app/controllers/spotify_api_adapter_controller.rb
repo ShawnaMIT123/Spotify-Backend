@@ -16,6 +16,7 @@ class SpotifyApiAdapterController < ApplicationController
     else
       puts "Current user's access token has not expired"
       #hey you
+      #what  up
     end
   end
 end
