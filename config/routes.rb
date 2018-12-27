@@ -9,8 +9,10 @@ Rails.application.routes.draw do
       get "/users" => "users#create"
       get '/users/:id' => 'users#show'
 
+
       resources :rooms
       resources :tracks
+        mount ActionCable.server => '/cable'
 
     end
   end
