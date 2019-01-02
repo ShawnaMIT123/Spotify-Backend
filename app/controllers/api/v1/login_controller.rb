@@ -1,5 +1,8 @@
 class Api::V1::LoginController < ApplicationController
+  skip_before_action :authorized, only: [:create]
+
   def create
+
 
     query_params ={
       client_id: 'bd16d9f4a0d6411aae3835dcd441841e',
@@ -10,7 +13,22 @@ class Api::V1::LoginController < ApplicationController
     }
       url = "https://accounts.spotify.com/authorize/"
 
+
       redirect_to "#{url}?#{query_params.to_query}"
 
+
   end
+
+  def show
+    byebug
+  # If application_controller#authorized is successful,
+  render json: {
+    # Return JSON data for that current_user
+    spotify_id: current_user.spotify_id,
+    display_name: current_user.display_name,
+    url: current_user.url,
+    img_url: current_user.profile_image
+    }
+end
+
 end

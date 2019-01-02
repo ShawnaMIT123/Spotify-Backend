@@ -1,4 +1,5 @@
 class Api::V1::TracksController < ApplicationController
+  skip_before_action :authorized
   before_action :find_track, only: [:show, :index, :destroy, :update]
   def index
     @tracks = Track.all

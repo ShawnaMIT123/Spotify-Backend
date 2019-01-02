@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       get "/users/accesstoken" => "users#accessToken"
       get "/users" => "users#create"
       get '/users/:id' => 'users#show'
+      get '/auth', action: :show, controller: 'users'
 
 
       resources :rooms

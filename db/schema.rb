@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_28_222116) do
+ActiveRecord::Schema.define(version: 2019_01_02_092349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,9 @@ ActiveRecord::Schema.define(version: 2018_12_28_222116) do
     t.string "img_url"
     t.integer "duration_ms"
     t.datetime "start_time"
+    t.integer "user_id"
+    t.string "user_name"
+    t.string "album"
   end
 
   create_table "users", force: :cascade do |t|
@@ -51,6 +54,9 @@ ActiveRecord::Schema.define(version: 2018_12_28_222116) do
     t.string "refresh_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "profile_image"
+    t.string "display_name"
+    t.boolean "logged_in"
   end
 
 end

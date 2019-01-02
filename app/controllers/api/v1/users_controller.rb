@@ -1,25 +1,44 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :find_user, only: [:show]
+  skip_before_action :authorized, only: [:create]
+  # before_action :find_user, only: [:show]
 
 
   def show
 
-    if @user.access_token_expired?
-      body ={
-        grant_type: "refresh_token",
-        refresh_token: @user.refresh_token,
-        client_id: 'bd16d9f4a0d6411aae3835dcd441841e',
-        client_secret: 'fa86350bbbb34a2c8e12c1564cc5e785'
+     current_user.refresh_token
 
+
+    # if @user.access_token_expired?
+    #   body ={
+    #     grant_type: "refresh_token",
+    #     refresh_token: @user.refresh_token,
+    #     client_id: 'bd16d9f4a0d6411aae3835dcd441841e',
+    #     client_secret: 'fa86350bbbb34a2c8e12c1564cc5e785'
+    #
+    #   }
+    #   auth_response = RestClient.post('https://accounts.spotify.com/api/token', body)
+    #   auth_params = JSON.parse(auth_response)
+    #   @user.update(access_token: auth_params["access_token"])
+    # else
+    #   puts "Current user's acces token has not expired"
+    # end
+
+
+
+
+
+    render json: {
+      # Return JSON data for that current_user
+      user: {
+      spotify_url: current_user.spotify_url,
+      username: current_user.username,
+      display_name: current_user.display_name,
+      uri: current_user.uri,
+      profile_image: current_user.profile_image,
+      access_token: current_user.access_token,
+      user_id: current_user.id
       }
-      auth_response = RestClient.post('https://accounts.spotify.com/api/token', body)
-      auth_params = JSON.parse(auth_response)
-      @user.update(access_token: auth_params["access_token"])
-    else
-      puts "Current user's acces token has not expired"
-    end
-
-    render json: @user
+    }
   end
 
   def create
@@ -55,9 +74,20 @@ class Api::V1::UsersController < ApplicationController
       spotify_url: user_params["external_urls"]["spotify"],
       href: user_params["href"], uri:user_params["uri"])
 
-      @user.update(access_token: auth_params["access_token"], refresh_token: auth_params["refresh_token"])
+      display_name = user_params['display_name']
+img_url = user_params["images"][0] ? user_params["images"][0]["url"] : nil
+@user.update(profile_image: img_url, display_name: display_name)
+@user.update(logged_in: true)
 
-      redirect_to "http://localhost:3001/success"
+
+      @user.update(access_token: auth_params["access_token"], refresh_token: auth_params["refresh_token"])
+      payload = {user_id: @user.id}
+      token = issue_token(payload)
+
+
+
+      # redirect_to "http://localhost:3001/success"
+      redirect_to "http://localhost:3001/success?jwt=#{token}"
     end
   end
 
@@ -172,12 +202,12 @@ class Api::V1::UsersController < ApplicationController
 
 
   def user_params
-    params.permit(:username, :spotify_url, :access_token, :refresh_token, :id, :uri)
+    params.permit(:username, :spotify_url, :access_token, :refresh_token, :id, :uri, :display_name, :profile_image, :user_id)
   end
 
-  def find_user
-    @user = User.find(params[:id])
-  end
+  # def find_user
+  #   @user = User.find(params[:id])
+  # end
 
   def refresh_token
     current_user = find_user()
