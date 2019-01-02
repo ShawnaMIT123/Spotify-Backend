@@ -2,6 +2,15 @@ class Api::V1::UsersController < ApplicationController
   skip_before_action :authorized, only: [:create]
   # before_action :find_user, only: [:show]
 
+def index
+
+   @users = User.all.select { |user|  user.online_now == true  }.map{ |user| [user.profile_image, user.display_name]}
+   render json: {
+     # Return JSON data for that current_user
+     users: @users
+
+  }
+end
 
   def show
 
@@ -75,9 +84,9 @@ class Api::V1::UsersController < ApplicationController
       href: user_params["href"], uri:user_params["uri"])
 
       display_name = user_params['display_name']
-img_url = user_params["images"][0] ? user_params["images"][0]["url"] : nil
-@user.update(profile_image: img_url, display_name: display_name)
-@user.update(logged_in: true)
+      img_url = user_params["images"][0] ? user_params["images"][0]["url"] : nil
+  @user.update(profile_image: img_url, display_name: display_name)
+  @user.update(online_now: true)
 
 
       @user.update(access_token: auth_params["access_token"], refresh_token: auth_params["refresh_token"])

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       post "/users/addSongToPlaylist" => "users#addSongToPlaylist"
       post "/users/browserBar" => "users#browserBar"
       get "/users/accesstoken" => "users#accessToken"
+      get "/users/index" => "users#index"
       get "/users" => "users#create"
       get '/users/:id' => 'users#show'
       get '/auth', action: :show, controller: 'users'
