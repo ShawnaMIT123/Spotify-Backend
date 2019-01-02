@@ -5,7 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-Room.create(name: 'Shawnas Room Test', user_id: 1)
+Room.create(name: 'Shawnas Room Test', owner_id: 1)
 Track.create(room_id: 1, spotify_url: "spotify:track:4qKcDkK6siZ7Jp1Jb4m0aL")
 Track.create(room_id: 1, spotify_url: "spotify:track:2G7V7zsVDxg1yRsu7Ew9RJ")
 Track.create(room_id: 1, spotify_url: "spotify:track:6vN77lE9LK6HP2DewaN6HZ")
